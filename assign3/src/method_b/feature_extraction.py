@@ -40,6 +40,8 @@ def stream_features(coll, ids, s):
 
 
 def extract(coll, qid):
-    F = np.hstack([stream_features(coll, coll.queries[qid], s) for s in STREAMS])
+    if len(coll.queries[qid]) == 0:      # no query term in the vocabulary: every document scores 0
+        return np.zeros((coll.N, len(FEATURE_NAMES)))
+    F =np.hstack([stream_features(coll, coll.queries[qid], s) for s in STREAMS])
     lo, hi = F.min(0), F.max(0)
     return (F - lo) / np.where(hi > lo, hi - lo, 1)
