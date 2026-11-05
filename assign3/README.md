@@ -197,7 +197,8 @@ python main.py predict A path/to/queries.qry results/run_A.txt
 
 - The query file must be in **Cranfield format**: each query starts with a `.I <id>` line, then a `.W` line, then the query text.
 - Queries are numbered **1, 2, 3, … in the order they appear in the file**, which is the numbering `cranqrel` uses. The number after `.I` is ignored.
-- The output is the top 100 documents per query in TREC format. The command also prints the cut-off k learned on the training data. To get the set of documents returned as relevant, keep only the top k lines of each query.
+- The command writes two files in TREC format: the given output file with the top 100 documents per query, and a `_relevant` file next to it (e.g. `results/run_B_relevant.txt`) with only the top k documents per query, the set returned as relevant. k is the F1-optimal cut-off learned on the training data (stored in `models/`).
+- A query with no term in the collection vocabulary (e.g. only stopwords) gets a score of 0 for every document, so its ranking is by document id.
 
 To check that it works, rank the original queries:
 

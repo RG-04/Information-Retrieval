@@ -122,8 +122,12 @@ def predict(method, query_file, out_file):
     model = json.load(open(f'models/method_{method.lower()}.json'))
     feature_fn = (lambda q: zone_scores(coll, q)) if method.upper() == 'A' else (lambda q: extract(coll, q))
     run, scores = coll.rank({q: feature_fn(q) @ np.array(model['weights']) for q in coll.queries})
-    write_run(run, scores, out_file, f'method{method.upper()}')
-    print(f'wrote top-100 for {len(run)} queries to {out_file} (F1-optimal cut-off k={model["cutoff"]})')
+    k, tag = model['cutoff'], f'method{method.upper()}'
+    relevant_file = '_relevant'.join(os.path.splitext(out_file))
+    write_run(run, scores, out_file, tag)
+    write_run(run, scores, relevant_file, tag, depth=k)
+    print(f'wrote top-100 for {len(run)} queries to {out_file}, '
+          f'and the top-{k} returned as relevant (F1-optimal cut-off) to {relevant_file}')
 
 
 if __name__ == '__main__':

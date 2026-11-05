@@ -234,7 +234,8 @@ queries}, with MAP as the criterion. The test queries are never used for model s
   at the tuned $k$. MAP and nDCG@10 (graded) are reported as additional measures of ranking
   quality.
   \item \code{python main.py predict A|B <queries> <out>} ranks unseen queries with the
-  final models, which are retrained on all 225 queries.
+  final models, which are retrained on all 225 queries. It writes the top 100 documents per
+  query and, in a second \code{\_relevant} file, the top-$k$ set returned as relevant.
 \end{itemize}
 
 % ---------------------------------------------------------------------------
@@ -513,6 +514,7 @@ python report/make_figures.py                   # regenerate figures/
 
 \noindent The query file for \code{predict} must be in Cranfield format (\code{.I} and
 \code{.W} lines). Queries are numbered by their order in the file. The output is the top 100
-documents per query in TREC format. Full instructions are in \code{README.md}.
+documents per query in TREC format, plus a \code{\_relevant} file with the top-$k$ documents
+per query that are returned as relevant. Full instructions are in \code{README.md}.
 
 \end{document}
